@@ -1,16 +1,5 @@
 <template>
 <div>
-  <!--<v-layout row wrap>
-    <v-flex xs2>
-      <v-btn @click="expandAll">Expand All</v-btn>
-    </v-flex>
-    <v-flex xs2>
-      <v-btn>Collapse All</v-btn>
-    </v-flex>
-  </v-layout>
-  Integrate drag-drop and expanding collapsing functionality
-  and just implement expandAll and collapseAll buttons
-  -->
     <div
       :class="{bold: isFolder}"
       @click="toggle"
