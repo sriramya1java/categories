@@ -1,0 +1,65 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <!-- Wijmo references (required) -->
+    <script src="http://cdn.wijmo.com/5.20172.328/controls/wijmo.min.js"></script>
+    <link href="http://cdn.wijmo.com/5.20172.328/styles/wijmo.min.css" rel="stylesheet" />
+
+    <!-- Wijmo controls (optional, include the controls you need) -->
+    <script src="http://cdn.wijmo.com/5.20172.328/controls/wijmo.nav.min.js"></script>
+    <script src="http://cdn.wijmo.com/5.20172.328/controls/wijmo.chart.min.js"></script>
+    <script src="http://cdn.wijmo.com/5.20172.328/controls/wijmo.input.min.js"></script>
+    <script src="http://cdn.wijmo.com/5.20172.328/controls/wijmo.gauge.min.js"></script>
+
+    <!-- Wijmo custom theme (optional, include the theme you like) -->
+    <link href="http://cdn.wijmo.com/5.20172.328/styles/themes/wijmo.theme.modern.min.css" rel="stylesheet" />
+
+    <!-- Wijmo custom culture (optional, include the culture you want) -->
+    <script src="http://cdn.wijmo.com/5.20172.328/controls/cultures/wijmo.culture.ja.min.js"></script>
+
+    <!-- AngularJS and Wijmo directives (optional, use in AngularJS applications) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="http://cdn.wijmo.com/5.20172.328/interop/angular/wijmo.angular.min.js"></script>
+</head>
+<body>
+
+    <div id="tv" class="custom-tree"></div>
+
+    <script id="scriptInit">
+    onload = function () {
+        window.TreeNodeData = [];
+        var parent = 10, child = 2, child1 = 2, child2 = 1;
+        for (var m = 1; m <= parent; m++) {
+            var childArray1 = [];
+            TreeNodeData.push({ id: "a" + m, name: "Node" + m, child: childArray1, items: childArray1, expanded: true, isCollapsed: false, isExpanded: true, });
+            for (var n = 1; n <= child; n++) {
+                var childArray2 = [];
+                childArray1.push({ id: "b" + m + n, name: "Node" + m + n, child: childArray2, items: childArray2, expanded: true, isCollapsed: false, isExpanded: true, });
+                for (var o = 1; o <= child1; o++) {
+                    var childArray3 = [];
+                    childArray2.push({ id: "c" + m + n + o, name: "Node" + m + n + o, child: childArray3, items: childArray3, expanded: true, isCollapsed: false, isExpanded: true, });
+                    for (var p = 1; p <= child2; p++) {
+                        childArray3.push({ id: "d" + m + n + o + p, name: "Node" + m + n + o + p });
+                    }
+                }
+            }
+        }
+        window.wstart = Math.floor(Date.now() / 1);
+        // create and bind the TreeView
+        var tv = new wijmo.nav.TreeView('#tv', {
+            displayMemberPath: 'name',
+            allowDragging: true,
+            childItemsPath: 'items',
+            itemsSource: TreeNodeData,
+            autoCollapse: false,
+            loadedItems: function () {
+                var time = Math.floor(Date.now() / 1) - wstart;
+                var nodeLen = document.getElementById('tv').querySelectorAll('.wj-node').length;
+                alert("Running Time : " + time + "ms, nodes :" + nodeLen);
+            }
+        });
+    }
+    </script>
+
+</body>
+</html>
