@@ -6,11 +6,8 @@
        @dragover.stop="handleDragOver"
        @drop.stop="handleDrop"
        @dragleave.stop="handleDragLeave"
-       @click="toggle"
-       @dblclick="changeType"
        @dragend.stop="handleDragEnd">
     {{ data.label }}
-    <span v-if="isFolder">[{{ open ? '-' : '+' }}]</span>
     <div v-if="displayedChildren.length" class="tree-node-children">
       <tree-node
         :key="child.id"
@@ -19,15 +16,6 @@
         :shared="shared"
         :vm-idx="idx">
       </tree-node>
-      <ul v-show="open" v-if="isFolder">
-        <item
-          class="item"
-          v-for="(model, index) in model.children"
-          :key="index"
-          :model="model">
-        </item>
-        <li class="add" @click="addChild">+</li>
-      </ul>
     </div>
   </div>
 </template>
