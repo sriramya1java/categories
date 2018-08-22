@@ -1,14 +1,16 @@
 <template>
-  <div :class="['tree-node', { 'empty-node': amIEmptyNode }]"
+  <div :class="['tree-node', { 'empty-node': amIEmptyNode }, {bold: amIEmptyNode}]"
        :draggable="amIEmptyNode ? undefined : true"
        @dragstart.stop="handleDragStart"
        @dragenter.stop="handleDragEnter"
        @dragover.stop="handleDragOver"
        @drop.stop="handleDrop"
        @dragleave.stop="handleDragLeave"
-       @dragend.stop="handleDragEnd">
+       @dragend.stop="handleDragEnd"
+       @click="toggle">
     {{ data.label }}
-    <div v-if="displayedChildren.length" class="tree-node-children">
+    <span v-if="displayedChildren.length">[{{ open ? '-' : '+' }}]</span>
+    <div v-if="displayedChildren.length" class="tree-node-children" v-show="open">
       <tree-node
         :key="child.id"
         v-for="(child, idx) in displayedChildren"
@@ -20,22 +22,24 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 export default {
   name: 'TreeNode', // as a recursive component
   props: {
     data: { type: Object, required: true }, // { label: String, children: [{ label, children }] } or an empty object
     shared: { type: Object, default: () => ({/* draggingVm: VueInstance */}) }, // shared data for all the instances
-    vmIdx: Number // current instance's index in v-for (if exists)
+    vmIdx: Number, // current instance's index in v-for (if exists)
+    isOpen: false
+  },
+  data () {
+    return {
+      open: this.isOpen
+    }
   },
   computed: {
     amIEmptyNode () {
       // data of an empty node is an empty object: {}
       return !this.data.label
-    },
-    isFolder: function () {
-      return this.model.children &&
-        this.model.children.length
     },
     /**
        * Generate adjacent empty nodes for each real node, in order to implement insertion actions
@@ -133,21 +137,9 @@ export default {
       this.$el.classList.remove('drop-allowed', 'drop-not-allowed')
     },
     toggle: function () {
-      if (this.isFolder) {
+      if (this.displayedChildren.length) {
         this.open = !this.open
       }
-    },
-    changeType: function () {
-      if (!this.isFolder) {
-        Vue.set(this.model, 'children', [])
-        this.addChild()
-        this.open = true
-      }
-    },
-    addChild: function () {
-      this.model.children.push({
-        name: 'new stuff'
-      })
     }
   }
 }
@@ -179,5 +171,8 @@ export default {
   }
   .drop-not-allowed {
     opacity: 0.7;
+  }
+  .bold {
+    font-weight: bold;
   }
 </style>
